@@ -42,20 +42,35 @@ module.exports = async function (context, req) {
         }
 
         if (req.method === 'POST') {
-            const key = await gamesService.addGame(req.body);
+            const game = req.body;
 
-            context.res = {
-                status: 200,
-                body: {
-                    UID: key,
-                    ...req.body
+            try {
+                const updates = [];
+                updates.push(...Object.keys(game.WinningTeam.Players).map(k => playerService.addWin(k)));
+                updates.push(...Object.keys(game.LosingTeam.Players).map(k => playerService.addLoss(k)));
+                updates.push(teamsService.addLoss(game.LosingTeam.UID), teamsService.addWin(game.WinningTeam.UID));
+                updates.push(gamesService.addGame(game));
+
+                const result = await Promise.all(updates);
+
+                // gameUID is only thing returned
+                const gameUID = result.filter(Boolean)[0];
+                context.res = {
+                    status: 200,
+                    body: {
+                        UID: gameUID,
+                        ...req.body
+                    }
                 }
-            }
-        }
+            } catch (ex) {
+                context.log(ex);
 
-        if (req.method === 'PUT') {
-            context.res = {
-                status: 404,
+                context.res = {
+                    status: 500,
+                    body: {
+                        error: 'An error occurred while updating Firebase db.'
+                    }
+                }
             }
         }
     } else if (entity === ENTITIES.PLAYERS) {
@@ -75,13 +90,6 @@ module.exports = async function (context, req) {
                 status: 404,
             }
         }
-
-        if (req.method === 'PUT') {
-            await playerService.updatePlayerRecord(req.body);
-            context.res = {
-                status: 204,
-            }
-        }
     } else if (entity === ENTITIES.TEAMS) {
         if (req.method === 'GET') {
             const teams = await teamsService.getAll();
@@ -97,13 +105,6 @@ module.exports = async function (context, req) {
         if (req.method === 'POST') {
             context.res = {
                 status: 404,
-            }
-        }
-
-        if (req.method === 'PUT') {
-            await teamsService.updateTeamRecord(req.body);
-            context.res = {
-                status: 204,
             }
         }
     } else {

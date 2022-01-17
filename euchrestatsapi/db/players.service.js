@@ -1,4 +1,5 @@
 const DatabaseService = require("./database.service");
+const firebase = require("firebase-admin");
 
 class PlayersService extends DatabaseService {
   constructor(props) {
@@ -6,10 +7,15 @@ class PlayersService extends DatabaseService {
     this.ref = this.database.ref('Players');
   }
 
-  async updatePlayerRecord(player) {
+  async addLoss(playerUID) {
     return this.ref.update({
-      [`${player.UID}/Wins`]: player.Wins,
-      [`${player.UID}/Losses`]: player.Losses,
+      [`${playerUID}/Losses`]: firebase.database.ServerValue.increment(1),
+    })
+  }
+
+  async addWin(playerUID) {
+    return this.ref.update({
+      [`${playerUID}/Wins`]: firebase.database.ServerValue.increment(1),
     })
   }
 }
