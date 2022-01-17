@@ -26,8 +26,8 @@ const teamsService = new TeamsService();
 const gamesService = new GameService();
 
 module.exports = async function (context, req) {
-    context.log('JavaScript HTTP trigger function processed a request.');
     const {entity} = context.bindingData;
+    context.log(`Processing ${req.method} request for ${entity}`);
 
     if (entity === ENTITIES.GAMES) {
         if (req.method === 'GET') {
