@@ -1,0 +1,15 @@
+{
+  "name": "euchrestatsapi",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "func start",
+    "publish": "func azure functionapp publish nfl-draft-api",
+    "test": "echo \"No tests yet...\""
+  },
+  "author": "",
+  "dependencies": {
+    "dotenv": "^14.0.1",
+    "firebase-admin": "^10.0.1"
+  }
+}
