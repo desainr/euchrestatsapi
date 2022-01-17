@@ -7,9 +7,9 @@ class PlayersService extends DatabaseService {
   }
 
   async updatePlayerRecord(player) {
-    return this.ref.child(player.UID).set({
-      Wins: player.Wins,
-      Losses: player.Losses,
+    return this.ref.update({
+      [`${player.UID}/Wins`]: player.Wins,
+      [`${player.UID}/Losses`]: player.Losses,
     })
   }
 }

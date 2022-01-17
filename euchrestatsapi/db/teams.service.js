@@ -7,9 +7,9 @@ class TeamsService extends DatabaseService {
   }
 
   async updateTeamRecord(team) {
-    return this.ref.child(team.UID).set({
-      Wins: team.Wins,
-      Losses: team.Losses,
+    return this.ref.update({
+      [`${team.UID}/Wins`]: team.Wins,
+      [`${team.UID}/Losses`]: team.Losses,
     })
   }
 }
