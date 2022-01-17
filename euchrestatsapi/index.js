@@ -58,9 +58,7 @@ module.exports = async function (context, req) {
                 status: 404,
             }
         }
-    }
-
-    if (entity === ENTITIES.PLAYERS) {
+    } else if (entity === ENTITIES.PLAYERS) {
         if (req.method === 'GET') {
             const players = await playerService.getAll();
 
@@ -84,9 +82,7 @@ module.exports = async function (context, req) {
                 status: 204,
             }
         }
-    }
-
-    if (entity === ENTITIES.TEAMS) {
+    } else if (entity === ENTITIES.TEAMS) {
         if (req.method === 'GET') {
             const teams = await teamsService.getAll();
 
@@ -110,9 +106,9 @@ module.exports = async function (context, req) {
                 status: 204,
             }
         }
-    }
-
-    context.res = {
-        status: 404,
+    } else {
+        context.res = {
+            status: 404,
+        }
     }
 }
