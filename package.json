@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "start": "func start",
-    "publish": "func azure functionapp publish euchrestatsapi",
+    "publish": "func azure functionapp publish maplestreeteuchreapi",
     "test": "echo \"No tests yet...\""
   },
   "author": "",
